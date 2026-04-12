@@ -1,12 +1,12 @@
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { useModal } from "@hooks/use-modal";
-import type { UseBookingFormReturn } from "../hooks/use-booking-form";
-import DatePickerDialog from "./date-picker-dialog";
-import FormTitle from "./form-title";
+import type { UseBookingFormReturn } from "../../hooks/use-booking-form";
+import DatePickerDialog from "../ui/date-picker-dialog";
+import FormTitle from "../ui/form-title";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/es";
-import { useGetAviableSlots } from "../services/get-slots";
+import { useGetAviableSlots } from "../../services/get-slots";
 
 dayjs.locale("es");
 
@@ -134,8 +134,8 @@ const DateTimeForm = ({ bookingForm, step, onStep }: DateTimeFormProps) => {
   const {
     selectedDate,
     setSelectedDate,
-    selectedTime,
-    setSelectedTime,
+    selectedSlot,
+    setSelectedSlot,
     selectedEmployee,
     selectedServices,
   } = bookingForm;
@@ -157,7 +157,7 @@ const DateTimeForm = ({ bookingForm, step, onStep }: DateTimeFormProps) => {
       sx={{ maxWidth: 480, mx: "auto", width: "100%" }}
     >
       <FormTitle
-        title={`Select Date & Time`}
+        title={`Fecha y hora`}
         subtitle="Choose an available slot below"
       />
 
@@ -165,15 +165,15 @@ const DateTimeForm = ({ bookingForm, step, onStep }: DateTimeFormProps) => {
 
       <TimeSlotGrid
         slots={timeIntervals || []}
-        selected={selectedTime}
-        onSelect={setSelectedTime}
+        selected={selectedSlot}
+        onSelect={setSelectedSlot}
       />
 
       <Button
         fullWidth
         variant="contained"
         size="large"
-        disabled={!selectedTime}
+        disabled={!selectedSlot}
         onClick={() => onStep(step + 1)}
         sx={{ borderRadius: 3, py: 1.5, fontWeight: 600, fontSize: "1rem" }}
       >
@@ -185,7 +185,7 @@ const DateTimeForm = ({ bookingForm, step, onStep }: DateTimeFormProps) => {
         value={selectedDate}
         onChange={(date) => {
           setSelectedDate(date);
-          setSelectedTime(null);
+          setSelectedSlot(null);
         }}
       />
     </Stack>

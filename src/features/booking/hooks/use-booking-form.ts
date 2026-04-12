@@ -1,61 +1,60 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useState } from "react";
 import dayjs, { type Dayjs } from "dayjs";
 
 export interface BookingFormState {
   selectedEmployee: string;
   selectedServices: string[];
   selectedDate: Dayjs;
-  selectedTime: string | null;
+  selectedSlot: string | null;
+  customerName: string;
+  customerLastName: string;
+  customerPhone: string;
+  customerEmail: string;
 }
 
 export interface UseBookingFormReturn extends BookingFormState {
   setSelectedEmployee: (employeeId: string) => void;
   toggleService: (id: string) => void;
   setSelectedDate: (date: Dayjs) => void;
-  setSelectedTime: (time: string | null) => void;
+  setSelectedSlot: (slot: string | null) => void;
+  setCustomerName: (value: string) => void;
+  setCustomerLastName: (value: string) => void;
+  setCustomerPhone: (value: string) => void;
+  setCustomerEmail: (value: string) => void;
 }
 
 export const useBookingForm = (): UseBookingFormReturn => {
-  const { employeeId, serviceId, date } = useSearch({ from: "/booking" });
-  const navigate = useNavigate({ from: "/booking" });
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [customerName, setCustomerName] = useState("");
+  const [customerLastName, setCustomerLastName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
 
   const toggleService = (id: string) => {
-    const currentServices = serviceId || [];
-    const newServices = currentServices.includes(id)
-      ? currentServices.filter((s) => s !== id)
-      : [...currentServices, id];
-
-    navigate({
-      search: (prev) => ({ ...prev, serviceId: newServices }),
-    });
-  };
-
-  const setSelectedEmployee = (id: string) => {
-    navigate({
-      search: (prev) => ({ ...prev, employeeId: id }),
-    });
-  };
-
-  const setSelectedDate = (newDate: Dayjs) => {
-    navigate({
-      search: (prev) => ({ ...prev, date: newDate.format("YYYY-MM-DD") }),
-    });
-  };
-
-  const setSelectedTime = (newTime: string | null) => {
-    navigate({
-      search: (prev) => ({ ...prev, time: newTime ?? undefined }),
-    });
+    setSelectedServices((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+    );
   };
 
   return {
-    selectedEmployee: employeeId || "",
-    selectedServices: serviceId || [],
-    selectedDate: dayjs(date || dayjs()),
-    selectedTime: "",
+    selectedEmployee,
+    selectedServices,
+    selectedDate,
+    selectedSlot,
+    customerName,
+    customerLastName,
+    customerPhone,
+    customerEmail,
     setSelectedEmployee,
     toggleService,
     setSelectedDate,
-    setSelectedTime,
+    setSelectedSlot,
+    setCustomerName,
+    setCustomerLastName,
+    setCustomerPhone,
+    setCustomerEmail,
   };
 };

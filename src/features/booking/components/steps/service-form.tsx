@@ -1,11 +1,11 @@
 import { Button, Stack } from "@mui/material";
 import { useModal } from "@hooks/use-modal";
-import type { UseBookingFormReturn } from "../hooks/use-booking-form";
-import ServiceInfoDialog from "./service-info-dialog";
-import ServiceCard from "./service-card";
-import FormTitle from "./form-title";
-import { useGetAviableServicesPaginated } from "../services/get-services";
-import type { ServiceItem } from "../types/services.types";
+import type { UseBookingFormReturn } from "../../hooks/use-booking-form";
+import ServiceInfoDialog from "../ui/service-info-dialog";
+import ServiceCard from "../ui/service-card";
+import FormTitle from "../ui/form-title";
+import { useGetAviableServicesPaginated } from "../../services/get-services";
+import type { ServiceItem } from "../../types/services.types";
 
 interface ServiceFormProps {
   bookingForm: UseBookingFormReturn;

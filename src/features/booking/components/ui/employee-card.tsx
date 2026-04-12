@@ -3,7 +3,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 
 import { Box, Card, CardActionArea, Stack, Typography } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import type { EmployeeItem } from "../types/employees.types";
+import type { EmployeeItem } from "../../types/employees.types";
 
 interface EmployeeCardProps {
   employee: EmployeeItem;

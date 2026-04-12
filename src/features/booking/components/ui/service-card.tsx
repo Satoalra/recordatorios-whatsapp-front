@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import type { ServiceItem } from "../types/services.types";
+import type { ServiceItem } from "../../types/services.types";
 import { ArrowBack } from "@mui/icons-material";
 
 interface ServiceCardProps {

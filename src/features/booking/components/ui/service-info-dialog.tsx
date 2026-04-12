@@ -11,7 +11,7 @@ import {
 import ResponsiveDialog from "@components/responsive-dialog";
 import { useScreenSize } from "@theme/useScreenSize";
 import type { UseModalReturn } from "@hooks/use-modal";
-import type { ServiceItem } from "../types/services.types";
+import type { ServiceItem } from "../../types/services.types";
 import { ArrowBack } from "@mui/icons-material";
 
 // ─── Types ────────────────────────────────────────────────────────────────────

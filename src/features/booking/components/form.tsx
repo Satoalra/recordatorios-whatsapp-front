@@ -1,10 +1,12 @@
-import CircularProgressWithLabel from "@components/circular-progress-with-label";
-import { Stack, Step, StepButton, Stepper } from "@mui/material";
-import { useScreenSize } from "@theme/useScreenSize";
-import DateTimeForm from "./date-time-form";
-import ServiceForm from "./service-form";
+import { Box, IconButton, LinearProgress, Stack, Typography } from "@mui/material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import BookingConfirmed from "./steps/booking-confirmed";
+import CustomerInfoForm from "./steps/customer-info-form";
+import DateTimeForm from "./steps/date-time-form";
+import EmployeeForm from "./steps/employee-form";
+import OrderSummaryForm from "./steps/order-summary-form";
+import ServiceForm from "./steps/service-form";
 import { useBookingForm } from "../hooks/use-booking-form";
-import EmployeeForm from "./employee-form";
 
 const steps = [
   "Colaboradores",
@@ -21,16 +23,24 @@ type StepComponent = React.ComponentType<{
   step: number;
 }>;
 
-const Components: StepComponent[] = [EmployeeForm, ServiceForm, DateTimeForm];
+const Components: StepComponent[] = [
+  EmployeeForm,
+  ServiceForm,
+  DateTimeForm,
+  CustomerInfoForm,
+  OrderSummaryForm,
+  BookingConfirmed,
+];
 
 const BookingForm = ({
   step,
   onStep,
+  onCancel,
 }: {
   step: number;
   onStep: (nextStep: number) => void;
+  onCancel?: () => void;
 }) => {
-  const { isMobile } = useScreenSize();
   const bookingForm = useBookingForm();
 
   const CurrentComponent = Components[step];
@@ -39,23 +49,41 @@ const BookingForm = ({
 
   return (
     <Stack direction="column" gap={4}>
-      {!isMobile ? (
-        <Stepper nonLinear activeStep={step} alternativeLabel>
-          {steps.map((label, index) => (
-            <Step key={`step-${index}`} completed={step > index}>
-              <StepButton disableRipple onClick={() => onStep(index)}>
-                {label}
-              </StepButton>
-            </Step>
-          ))}
-        </Stepper>
-      ) : (
-        <CircularProgressWithLabel
-          label={`${step + 1}/${steps.length}`}
+      <Box>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ mb: 1 }}
+        >
+          <IconButton
+            size="small"
+            onClick={() => onStep(step - 1)}
+            disabled={step === 0}
+            sx={{ color: "text.primary" }}
+          >
+            <ArrowBackIosNewIcon fontSize="small" />
+          </IconButton>
+
+          <Typography variant="body2" fontWeight={500}>
+            Step {step + 1} of {steps.length}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{ cursor: "pointer", color: "text.secondary" }}
+            onClick={onCancel}
+          >
+            Cancel
+          </Typography>
+        </Stack>
+
+        <LinearProgress
+          variant="determinate"
           value={progress}
-          title={steps[step]}
+          sx={{ borderRadius: 4, height: 4 }}
         />
-      )}
+      </Box>
 
       <CurrentComponent bookingForm={bookingForm} step={step} onStep={onStep} />
     </Stack>

@@ -1,8 +1,8 @@
 import { Button, Stack } from "@mui/material";
-import type { UseBookingFormReturn } from "../hooks/use-booking-form";
-import FormTitle from "./form-title";
-import { useGetAviableEmployees } from "../services/get-employees";
-import EmployeeCard from "./employee-card";
+import type { UseBookingFormReturn } from "../../hooks/use-booking-form";
+import FormTitle from "../ui/form-title";
+import { useGetAviableEmployees } from "../../services/get-employees";
+import EmployeeCard from "../ui/employee-card";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 

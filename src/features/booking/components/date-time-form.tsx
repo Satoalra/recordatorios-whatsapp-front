@@ -1,29 +1,21 @@
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
-import type { Dayjs } from "dayjs";
 import { useModal } from "@hooks/use-modal";
 import type { UseBookingFormReturn } from "../hooks/use-booking-form";
 import DatePickerDialog from "./date-picker-dialog";
 import FormTitle from "./form-title";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/es";
+import { useGetAviableSlots } from "../services/get-slots";
+
+dayjs.locale("es");
 
 // ─── Mock time slots ──────────────────────────────────────────────────────────
 
 interface TimeSlot {
-  label: string;
-  disabled: boolean;
+  start: string;
+  end: string;
 }
-
-const TIME_SLOTS: TimeSlot[] = [
-  { label: "10:00 AM", disabled: false },
-  { label: "10:30 AM", disabled: false },
-  { label: "11:00 AM", disabled: false },
-  { label: "11:30 AM", disabled: true },
-  { label: "2:00 PM", disabled: false },
-  { label: "3:00 PM", disabled: false },
-  { label: "3:30 PM", disabled: true },
-  { label: "4:00 PM", disabled: false },
-  { label: "4:30 PM", disabled: true },
-];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -64,7 +56,7 @@ const DateDisplay = ({ date, onChangeClick }: DateDisplayProps) => (
           sx={{ color: "primary.main", fontSize: 20 }}
         />
         <Typography variant="body1" sx={{ fontWeight: 500 }}>
-          {date.format("dddd, MMMM D · YYYY")}
+          {date.format("dddd, D [de] MMMM [del] YYYY")}
         </Typography>
       </Stack>
       <Button
@@ -101,36 +93,27 @@ const TimeSlotGrid = ({ slots, selected, onSelect }: TimeSlotGridProps) => (
     </Typography>
     <Grid container spacing={1.5}>
       {slots.map((slot) => {
-        const isSelected = slot.label === selected;
+        const isSelected = slot.start === selected;
         return (
-          <Grid key={slot.label} size={4}>
+          <Grid key={slot.start} size={4}>
             <Button
               fullWidth
               variant={isSelected ? "contained" : "outlined"}
-              disabled={slot.disabled}
-              onClick={() => onSelect(slot.label)}
+              onClick={() => onSelect(slot.start)}
               sx={{
                 borderRadius: 2.5,
                 py: 1,
                 fontWeight: isSelected ? 700 : 500,
                 fontSize: "0.85rem",
-                borderColor: slot.disabled
-                  ? "grey.200"
-                  : isSelected
-                    ? undefined
-                    : "grey.300",
-                color: slot.disabled
-                  ? "text.disabled"
-                  : isSelected
-                    ? "primary.contrastText"
-                    : "text.primary",
-                bgcolor: slot.disabled ? "grey.50" : undefined,
+                borderColor: isSelected ? undefined : "grey.300",
+                color: isSelected ? "primary.contrastText" : "text.primary",
+                bgcolor: undefined,
                 "&:hover:not(:disabled)": {
                   borderColor: "primary.main",
                 },
               }}
             >
-              {slot.label}
+              {`${slot.start} - ${slot.end}`}
             </Button>
           </Grid>
         );
@@ -148,8 +131,23 @@ interface DateTimeFormProps {
 }
 
 const DateTimeForm = ({ bookingForm, step, onStep }: DateTimeFormProps) => {
-  const { selectedDate, setSelectedDate, selectedTime, setSelectedTime } =
-    bookingForm;
+  const {
+    selectedDate,
+    setSelectedDate,
+    selectedTime,
+    setSelectedTime,
+    selectedEmployee,
+    selectedServices,
+  } = bookingForm;
+
+  const { data } = useGetAviableSlots({
+    date: selectedDate.format("YYYY-MM-DD"),
+    employeeId: selectedEmployee,
+    serviceId: selectedServices,
+  });
+
+  const timeIntervals = data?.availableIntervals;
+
   const calendarModal = useModal();
 
   return (
@@ -166,7 +164,7 @@ const DateTimeForm = ({ bookingForm, step, onStep }: DateTimeFormProps) => {
       <DateDisplay date={selectedDate} onChangeClick={calendarModal.open} />
 
       <TimeSlotGrid
-        slots={TIME_SLOTS}
+        slots={timeIntervals || []}
         selected={selectedTime}
         onSelect={setSelectedTime}
       />

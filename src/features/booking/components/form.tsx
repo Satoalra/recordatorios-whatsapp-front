@@ -4,8 +4,10 @@ import { useScreenSize } from "@theme/useScreenSize";
 import DateTimeForm from "./date-time-form";
 import ServiceForm from "./service-form";
 import { useBookingForm } from "../hooks/use-booking-form";
+import EmployeeForm from "./employee-form";
 
 const steps = [
+  "Colaboradores",
   "Servicios",
   "Horarios",
   "Información",
@@ -19,7 +21,7 @@ type StepComponent = React.ComponentType<{
   step: number;
 }>;
 
-const Components: StepComponent[] = [ServiceForm, DateTimeForm];
+const Components: StepComponent[] = [EmployeeForm, ServiceForm, DateTimeForm];
 
 const BookingForm = ({
   step,

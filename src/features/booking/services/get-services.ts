@@ -32,7 +32,6 @@ export const useGetAviableServicesPaginated = (
 
         return data;
       } catch (error) {
-        console.error("Error en petición:", error);
         throw error;
       }
     },

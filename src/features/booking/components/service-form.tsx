@@ -2,13 +2,10 @@ import { Button, Stack } from "@mui/material";
 import { useModal } from "@hooks/use-modal";
 import type { UseBookingFormReturn } from "../hooks/use-booking-form";
 import ServiceInfoDialog from "./service-info-dialog";
-
 import ServiceCard from "./service-card";
 import FormTitle from "./form-title";
 import { useGetAviableServicesPaginated } from "../services/get-services";
 import type { ServiceItem } from "../types/services.types";
-
-// ─── Mock data ────────────────────────────────────────────────────────────────
 
 interface ServiceFormProps {
   bookingForm: UseBookingFormReturn;
@@ -17,17 +14,21 @@ interface ServiceFormProps {
 }
 
 const ServiceForm = ({ bookingForm, onStep, step }: ServiceFormProps) => {
-  const { selectedServices, toggleService } = bookingForm;
+  const { selectedServices, toggleService, selectedEmployee } = bookingForm;
   const { data } = useGetAviableServicesPaginated({
     page: 1,
     pageSize: 10,
-    employeeId: "e34f27f5-8cd9-4651-9e07-5c74411fb4fd",
+    employeeId: selectedEmployee,
   });
 
   const services = data?.items;
   const serviceInfoModal = useModal<ServiceItem>();
 
   const selectedCount = selectedServices.length;
+
+  const handleNext = () => {
+    onStep(step + 1);
+  };
 
   return (
     <Stack
@@ -56,7 +57,7 @@ const ServiceForm = ({ bookingForm, onStep, step }: ServiceFormProps) => {
         fullWidth
         variant="contained"
         size="large"
-        onClick={() => onStep(step + 1)}
+        onClick={handleNext}
         disabled={selectedCount === 0}
         sx={{ borderRadius: 3, py: 1.5, fontWeight: 600, fontSize: "1rem" }}
       >

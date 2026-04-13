@@ -15,7 +15,6 @@ import {
   USER_PERMISSIONS_QUERY_KEY,
 } from "@services/user-permissions.service";
 import type { Action, Resource } from "@types-custom/rbac.types";
-import type { Permission } from "@types-custom/permissions.types";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -51,12 +50,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [queryClient]);
 
   const hasPermission = useCallback(
-    (resource: Resource, action: Action): boolean => {
+    (action: Action, resource: Resource): boolean => {
       if (!data?.permissions) return false;
-      return data.permissions.some(
-        (perm: Permission) =>
-          perm.resource === resource && perm.action === action,
-      );
+
+      return data.permissions.some((perm: string) => {
+        return perm === `${action}:${resource}`;
+      });
     },
     [data],
   );

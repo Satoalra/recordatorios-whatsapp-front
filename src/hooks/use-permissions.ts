@@ -6,18 +6,18 @@ export const usePermissions = () => {
 
   const canAccessAny = (checks: TypedPermission[]): boolean => {
     return checks.some(({ resource, action }) =>
-      hasPermission(resource, action),
+      hasPermission(action, resource),
     );
   };
 
   const canAccessAll = (checks: TypedPermission[]): boolean => {
     return checks.every(({ resource, action }) =>
-      hasPermission(resource, action),
+      hasPermission(action, resource),
     );
   };
 
   const canAccess = (resource: Resource, action: Action): boolean => {
-    return hasPermission(resource, action);
+    return hasPermission(action, resource);
   };
 
   return {

@@ -9,5 +9,5 @@ export interface Permission {
 }
 
 export interface UserPermissions {
-  permissions: Permission[];
+  permissions: string[];
 }

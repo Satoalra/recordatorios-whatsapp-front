@@ -50,7 +50,7 @@ const Protected = ({
       ? canAccessAll(permissions)
       : canAccessAny(permissions);
   } else if (resource && action) {
-    hasAccess = hasPermission(resource, action);
+    hasAccess = hasPermission(action, resource);
   }
 
   return hasAccess ? <>{children}</> : <>{defaultFallback}</>;

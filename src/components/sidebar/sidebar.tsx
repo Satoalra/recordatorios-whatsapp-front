@@ -132,7 +132,7 @@ const Sidebar = ({ open, onCollapse }: SidebarProps) => {
         <SidebarButton
           label="Clientes"
           open={open}
-          to="/clinic-cases"
+          to="/clients"
           icon={<ContentPasteOutlined />}
           childRoutes={["/clinic-cases/new", "/clinic-cases/"]}
           //canAccess={hasPermission("clinic-case", "read")}
